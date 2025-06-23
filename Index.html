@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purple Grid - Top to Bottom Animation</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background-color: #000;
+    }
+
+    #grid {
+      display: grid;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .colorBox {
+      width: 100%;
+      height: 100%;
+      background-color: #800080;
+      border: 1px solid black;
+      animation: breathe 6s ease-in-out infinite;
+      transition: background-color 3s;
+    }
+
+    @keyframes breathe {
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: scale(1.05);
+        filter: brightness(1.2);
+      }
+      100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="grid"></div>
+
+  <script>
+    const colors = ['#9202ab', '#360140'];
+
+    function getRandomPurple() {
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createGrid() {
+      const grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      const boxSize = 50;
+      const cols = Math.floor(window.innerWidth / boxSize);
+      const rows = Math.floor(window.innerHeight / boxSize);
+
+      grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      grid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const box = document.createElement('div');
+          box.className = 'colorBox';
+          box.style.backgroundColor = getRandomPurple();
+
+          // Animation delay increases by row
+          box.style.animationDelay = `${row * 1.2}s`;
+
+          grid.appendChild(box);
+        }
+      }
+    }
+
+    function changeColors() {
+      document.querySelectorAll('.colorBox').forEach(box => {
+        box.style.backgroundColor = getRandomPurple();
+      });
+    }
+
+    window.onload = () => {
+      createGrid();
+      setInterval(changeColors, 4000);
+    };
+
+    window.addEventListener('resize', createGrid);
+  </script>
+</body>
+</html>
